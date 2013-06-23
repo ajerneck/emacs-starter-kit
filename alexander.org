@@ -1,7 +1,7 @@
 #+TITLE: Local User Customizations
 #+OPTIONS: toc:nil num:nil ^:nil
 
-* Starter Kit kjhealy
+* Starter Kit alexander
 This file contains very local customizations---ones that in some cases
 you will not be able to just drop in and use because, e.g., they
 involve references to particular files on my own machine. It's
@@ -28,6 +28,27 @@ Finally, the [[*Local%20Org-mode%20XeLaTeX%20Export%20Settings][Local Org-mode X
  references to fonts that you may not have available on your
  system. Change the references as appropriate, or comment out or
  delete the lines.
+
+** Local Emacs Settings
+
+*** Saving minibuffer histories
+#+begin_src emacs-lisp
+
+;; savehist-mode for saving buffer histories
+(setq savehist-additional-variables    ;; also save...
+  '(search-ring regexp-search-ring)    ;; ... my search entries
+  savehist-file "~/.emacs.d/savehist") ;; keep my home clean
+(savehist-mode t)                      ;; do customization before activate
+
+#+end_src
+
+*** Highlight current line
+
+#+begin_src emacs-lisp
+(global-hl-line-mode 1)
+(set-face-background 'hl-line "grey10")
+#+end_src
+
 
 ** Local Miscellaneous Settings
 *** Color Theme Tweaks
@@ -139,13 +160,657 @@ A pandoc menu for markdown and tex files.
 
 ** Local Org-mode Settings
 
+*** Setup
+#+begin_src emacs-lisp
+
+;; The following lines are always needed.  Choose your own keys.
+(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cb" 'org-iswitchb)
+
+(global-font-lock-mode 1)                     ; for all buffers
+(add-hook 'org-mode-hook 'turn-on-font-lock)  ; Org buffers only
+(transient-mark-mode 1)
+#+end_src
+*** Basics
+
+#+BEGIN_SRC emacs-lisp
+
+#+END_SRC 
+
+
+*** Autosave
+
+#+begin_src emacs-lisp
+;; saving all files every hour
+(run-at-time "00:58" 3600 'org-save-all-org-buffers)
+
+#+end_src
+
+*** Publishing
+
+#+begin_src emacs-lisp
+  (setq org-publish-project-alist
+             '(("org"
+                :base-directory "/home/alexander/start/academic/lit/reading/"
+                :publishing-directory "/home/alexander/start/academic/lit/reading_html"
+                :section-numbers nil
+                :with-toc nil
+                )))
+  
+#+end_src
+
+
+
+*** Capture
+
+#+begin_src emacs-lisp
+;; setting up capture for orgmode
+(setq org-directory "~/start/admin/org")
+(setq org-default-notes-file (concat org-directory "/inbox.org"))
+(define-key global-map "\C-cc" 'org-capture)
+
+#+end_src
+
+**** Capture Templates
+
+#+begin_src emacs-lisp
+;; remember templates
+(setq org-capture-templates
+      '(("t" "Task" entry (file+headline "~/start/admin/org/inbox.org" "Tasks")
+	 "* TODO %? %^G \n  %U\n%a")
+	("n" "Note" entry (file+headline "~/start/admin/org/notes.org" "Inbox")
+	 "* %? :note: \n  %U")
+	("i" "Idea" entry (file+headline "~/start/admin/org/ideas.org" "Inbox")
+	 "* %? :idea: \n  %U")
+	("j" "Journal" entry (file+datetree "~/start/admin/org/journal.org")
+	 "* %U Journal Entry\n%?\n
+
+** Goals for tomorrow
+")
+
+	("r" "Resistance Planning" entry (file+datetree "~/start/admin/org/journal.org")
+	 "* %U Plan\n
+	- [ ] 09:00 
+	- [ ]       
+	- [ ] 10:00 
+	- [ ]       
+	- [ ] 11:00 
+	- [ ]       
+	- [ ] 12:00
+	- [ ]       
+	- [ ] 13:00 
+	- [ ]       
+	- [ ] 14:00 
+	- [ ]       
+	- [ ] 15:00 
+	- [ ]       
+	- [ ] 16:00 
+	- [ ]       
+	- [ ] 17:00 
+	- [ ]       
+	- [ ] 18:00 
+	- [ ]       
+	- [ ] 19:00 
+	- [ ]       
+
+*** Day Notes
+
+")
+
+))
+
+#+end_src
+
+
+** ESS
+
+*** Remote Sessions
+
+Remote sessions: configuring ESS for use with GNU screen and remote
+server. See https://stat.ethz.ch/pipermail/ess-help/2010-July/006202.html
+used to send 'screen' keybindings to shell in emacs
+
+#+begin_src emacs-lisp
+(define-key shell-mode-map (kbd "C-l") (lambda (seq) (interactive "k")
+(process-send-string nil seq)))
+(define-key inferior-ess-mode-map (kbd "C-l") (lambda (seq)
+(interactive "k") (process-send-string nil seq)))
+#+end_src
+
+*** Tags
+
+#+begin_src emacs-lisp
+
+(visit-tags-table "~/rtags/TAGS")
+#+end_src
+
+
+** Programming Modes
+*** Haskell  
+
+**** Haskell mode
+   
+    # # #+begin_src emacs-lisp
+    # ;; for haskell-mode
+    # (load "/usr/share/emacs/site-lisp/haskell-mode/haskell-site-file.el")
+    # (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+    # (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+   
+    # ;; ignore compiled Haskell files in filename completions
+    # (add-to-list 'completion-ignored-extensions ".hi")
+   
+    # # #+end_src
+   
+**** Auto-completion in haskell-mode
+   
+    #+begin_src emacs-lisp
+    ;; for auto-completion in haskell-mode
+    (add-to-list 'ac-modes 'haskell-mode)
+    #+end_src
+   
+**** ghc-mod
+   
+    # #+begin_src emacs-lisp :eval never
+    # (add-hook 'haskell-mode-hook (lambda () (ghc-init)))
+    # #+end_src
+   
+**** hs-lint
+  
+   Run hlint in emacs with C-c l
+   From [[http://alexott.blogspot.com/2009/01/running-hlint-from-emacs.html]]
+  
+# #+BEGIN_SRC emacs-lisp :eval never
+#      (require 'hs-lint)
+#      (defun my-haskell-mode-hook ()
+#        (local-set-key "\C-cl" 'hs-lint))
+    
+# #+END_SRC
+  
+  
+**** flymake 
+   From: http://www.emacswiki.org/emacs/FlymakeHaskell
+  
+# #+begin_src emacs-lisp :eval never
+      
+#      (defun flymake-haskell-init ()
+#        "When flymake triggers, generates a tempfile containing the
+#        contents of the current buffer, runs `hslint` on it, and
+#        deletes file. Put this file path (and run `chmod a+x hslint`)
+#        to enable hslint: https://gist.github.com/1241073"
+#        (let* ((temp-file   (flymake-init-create-temp-buffer-copy
+#                             'flymake-create-temp-inplace))
+#               (local-file  (file-relative-name
+#                             temp-file
+#                             (file-name-directory buffer-file-name))))
+#          (list "hslint" (list local-file))))
+    
+#      (defun flymake-haskell-enable ()
+#        "Enables flymake-mode for haskell, and sets <C-c d> as command
+#        to show current error."
+#        (when (and buffer-file-name
+#                   (file-writable-p
+#                    (file-name-directory buffer-file-name))
+#                   (file-writable-p buffer-file-name))
+#          (local-set-key (kbd "C-c d") 'flymake-display-err-menu-for-current-line)
+#          (flymake-mode t)))
+    
+#      ;; Forces flymake to underline bad lines, instead of fully
+#      ;; highlighting them; remove this if you prefer full highlighting.
+#      (custom-set-faces
+#       '(flymake-errline ((((class color)) (:underline "red"))))
+#       '(flymake-warnline ((((class color)) (:underline "yellow")))))
+    
+      
+#      (eval-after-load 'haskell-mode
+#        '(progn
+#           (require 'flymake)
+#           (push '("\\.l?hs\\'" flymake-haskell-init) flymake-allowed-file-name-masks)
+#           (add-hook 'haskell-mode-hook 'flymake-haskell-enable)
+#           (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)))
+  
+      
+# #+end_src elisp
+  
+#+begin_src emacs-lisp
+  
+  (require 'flymake-haskell-multi)
+  (add-hook 'haskell-mode-hook 'flymake-haskell-multi-load)
+  
+#+END_SRC
+  
+  
+*** Octave
+  
+  For octave-mode
+  see: http://sunsite.univie.ac.at/textbooks/octave/octave_34.html
+  
+#+begin_src emacs-lisp
+  
+  (autoload 'octave-mode "octave-mod" nil t)
+  (setq auto-mode-alist
+        (cons '("\\.m$" . octave-mode) auto-mode-alist))
+  
+  (add-hook 'octave-mode-hook
+            (lambda ()
+              (abbrev-mode 1)
+              (auto-fill-mode 1)
+              (global-unset-key "\C-cl")
+              (global-unset-key "\C-ca")
+              (global-unset-key "\C-cb")
+              (if (eq window-system 'x)
+                  (font-lock-mode 1))))
+  
+  
+#+end_src
+
+
+*** Python
+
+see http://pedrokroger.net/2010/07/configuring-emacs-as-a-python-ide-2/
+
+**** Python Modes
+
+#+begin_src emacs-lisp :eval never
+  ;; (require 'python-mode)
+  ;; (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
+  
+  ;; (require 'ipython)
+  
+#+end_src
+
+**** Anything
+
+***** Setup
+#+begin_src emacs-lisp
+;; from anything homepage
+(require 'anything)
+(require 'anything-match-plugin)
+(require 'anything-config)
+
+#+end_src
+
+***** anything-ipython
+
+#+begin_src emacs-lisp :eval never
+  ;;;; from anything-ipython.el
+  ;; (require 'anything-ipython)
+  ;; (add-hook 'python-mode-hook #'(lambda ()
+  ;;                                 (define-key py-mode-map (kbd "M-<tab>") 'anything-ipython-complete)))
+  ;; (add-hook 'ipython-shell-hook #'(lambda ()
+  ;;                                   (define-key py-mode-map (kbd "M-<tab>") 'anything-ipython-complete)))
+  
+  ;; (when (require 'anything-show-completion nil t)
+  ;;   (use-anything-show-completion 'anything-ipython-complete
+  ;;                                 '(length initial-pattern)))
+  
+  
+#+end_src
+
+**** pylookup
+
+Lookup python documentation in emacs.
+
+#+begin_src emacs-lisp
+;; add pylookup to your loadpath, ex) ~/.emacs.d/pylookup
+(setq pylookup-dir "/home/alexander/downloads/sources/tsgates-pylookup-3202709")
+(add-to-list 'load-path pylookup-dir)
+
+;; load pylookup when compile time
+(eval-when-compile (require 'pylookup))
+
+;; set executable file and db file
+(setq pylookup-program (concat pylookup-dir "/pylookup.py"))
+(setq pylookup-db-file (concat pylookup-dir "/pylookup.db"))
+
+;; set search option if you want
+;; (setq pylookup-search-options '("--insensitive" "0" "--desc" "0"))
+
+;; to speedup, just load it on demand
+(autoload 'pylookup-lookup "pylookup"
+  "Lookup SEARCH-TERM in the Python HTML indexes." t)
+
+(autoload 'pylookup-update "pylookup"
+  "Run pylookup-update and create the database at `pylookup-db-file'." t)
+
+(global-set-key "\C-ch" 'pylookup-lookup)
+
+
+#+end_src
+
+
+
+**** Lints
+
+Static code checkers for python
+
+#+begin_src emacs-lisp
+;; python pep8 and pylint
+(require 'python-pep8)
+(require 'python-pylint)
+;; delete trailing spaces when saving file
+;;(add-hook 'before-save-hook 'delete-trailing-whitespace)
+#+end_src
+
+**** Debugging
+
+#+begin_src emacs-lisp
+
+;; highlight python breakpoints
+(defun annotate-pdb()
+  (interactive)
+  (highlight-lines-matching-regexp "import pdb")
+  (highlight-lines-matching-regexp "pdb.set_trace()"))
+(add-hook 'python-mode-hook 'annotate-pdb)
+
+#+end_src
+
+*** SQL
+
+#+begin_src elisp
+  (eval-after-load 'sql-mode
+    '(define-key sql-mode-map (kbd "C-c n")
+       'sql-send-paragraph))
+
+#+end_src
+
+
+** Tramp
+  Tramp is used to edit files on remote servers.
+  This is based on http://jeremy.zawodny.com/blog/archives/000983.html
+
+#+begin_src emacs-lisp
+(require 'tramp)
+(setq tramp-default-method "scp")
+#+end_src
+
+** Syntax highlighting for mbox files
+  - used for coding emails in fossart.
+
+#+begin_src emacs-lisp
+  (require 'generic-x)
+   (define-generic-mode
+     'mbox-mode
+     '("##")
+     '("From" "Subject" "Date" "Message-ID" "References" "In-Reply-To")
+     '((":" . 'font-lock-operator))
+     '("\\.mbox$")
+     nil
+     "A mode for mbox files"
+   )  
+  
+#+end_src
+
+
+
+
+
+
+** Keybindings
+
+Using kill-word, which is often faster than going back to correct
+typos.
+From [[https://sites.google.com/site/steveyegge2/effective-emacs]]
+
+#+begin_src emacs-lisp
+
+(global-set-key "\C-w" 'backward-kill-word)
+(global-set-key "\C-x\C-k" 'kill-region)
+(global-set-key "\M-n" 'previous-line)
+(global-set-key "\M-p" 'next-line)
+(global-set-key "\M-g\M-m" 'magit-status)
+(global-set-key "\M-r" 'anything)
+
+#+end_src
+
+
+** Custom Functions
+
+*** Duplicate a line
+
+#+begin_src emacs-lisp
+(defun duplicate-line()
+  (interactive)
+  (move-beginning-of-line 1)
+  (kill-line)
+  (yank)
+  (open-line 1)
+  (next-line 1)
+  (yank)
+)
+(global-set-key (kbd "C-d") 'duplicate-line)
+#+end_src
+
+*** Auto-fill for one sentence per line
+
+To adjust one sentence per line
+see: http://luca.dealfaro.org/Emacs-fill-sentence-macro
+
+#+begin_src emacs-lisp
+
+(defun fill-sentence ()
+ (interactive)
+ (save-excursion
+   (or (eq (point) (point-max)) (forward-char))
+   (forward-sentence -1)
+   ;(indent-relative)
+   (let ((beg (point)))
+     (forward-sentence)
+     (fill-region-as-paragraph beg (point)))))
+(global-set-key "\ej" 'fill-sentence)
+
+
+#+end_src
+
+
+*** Count words in region
+
+#+begin_src emacs-lisp
+;; function to count words in region
+
+(defun count-words-region (start end)
+       (interactive "r")
+       (save-excursion
+          (let ((n 0))
+           (goto-char start)
+           (while (< (point) end)
+             (if (forward-word 1)
+                 (setq n (1+ n))))
+           (message "Region has %d words" n)
+           n)))
+#+end_src
+
+
+
+
+*** Org-Knitr
+
+see: https://github.com/pchalasani/OrgKnitr
+
+#+begin_src emacs-lisp
+
+(defun ess-knitr-run-in-R (cmd &optional choose-process)
+  "Convert current .org file to .Rnw, then knit it to .tex"
+  "Utility function not called by user."
+  (setq-default ess-dialect "R")
+  (let* ((rnw-buf (current-buffer)))
+
+    (if choose-process ;; previous behavior
+    (ess-force-buffer-current "R process to load into: ")
+      ;; else
+      (update-ess-process-name-list)
+      (cond ((= 0 (length ess-process-name-list))
+         (message "no ESS processes running; starting R")
+         (sit-for 1); so the user notices before the next msgs/prompt
+         (R)
+         (set-buffer rnw-buf)
+         )
+        ((not (string= "R" (ess-make-buffer-current))); e.g. Splus, need R
+         (ess-force-buffer-current "R process to load into: "))
+       ))
+
+    (save-excursion
+      (ess-execute (format "require(tools)")) ;; Make sure tools is loaded.
+      (basic-save-buffer); do not Sweave/Stangle old version of file !
+      (let* ((sprocess (get-ess-process ess-current-process-name))
+         (sbuffer (process-buffer sprocess))
+         (org-file (buffer-file-name))
+         (rnw-file (concat
+                    (file-name-sans-extension org-file)
+                    ".Rnw"))
+         (tex-file (concat
+                    (file-name-sans-extension org-file)
+                    ".tex"))
+         (Rnw-dir (file-name-directory rnw-file))
+	  (tex-buf (get-buffer-create " *ESS-tex-output*"))
+         (pdf-status)
+         (Sw-cmd
+          (format
+           "local({..od <- getwd(); require(knitr); setwd(%S); %s(%S); setwd(..od) })"
+           Rnw-dir cmd rnw-file))
+         )
+
+    (message "converting %s to Rnw" org-file)
+    (if (get-file-buffer tex-file)
+        (kill-buffer (get-file-buffer tex-file)))
+    (if (or (not (file-exists-p rnw-file))
+            (file-newer-than-file-p org-file rnw-file))
+        (progn ;; process .org --> .tex  only if needed
+          (org-export-as-latex 3)
+          (rename-file tex-file rnw-file t)))
+    (message "%s()ing %S" cmd rnw-file)
+    (ess-execute Sw-cmd 'buffer nil nil)
+    (switch-to-buffer rnw-buf)
+    (ess-show-buffer (buffer-name sbuffer) nil)))))
+
+(defun ess-prompt-wait2 (proc &optional  start-of-output sleep)
+  "Wait for a prompt to appear at BOL of process burffer
+PROC is the ESS process. Does not change point"
+;; redefined ess-prompt-wait from the ess-inf.el
+  (if sleep (sleep-for sleep)); we sleep here, *and* wait below
+  (if start-of-output nil (setq start-of-output (point-min)))
+  (with-current-buffer (process-buffer proc)
+    (while (progn
+             (accept-process-output proc 0 500)
+             (redisplay t)
+             (goto-char (marker-position (process-mark proc)))
+             (beginning-of-line)
+             (if (< (point) start-of-output) (goto-char start-of-output))
+             (not (looking-at inferior-ess-primary-prompt))))))
+
+
+
+;; Convert current file's .tex version to .pdf, do NOT display!
+;; modified version of ess-swv-PDF from ess-swv.el
+(defun ess-tex-PDF (&optional pdflatex-cmd)
+  "From LaTeX file, create a PDF (via 'texi2pdf' or 'pdflatex', ...), by
+default using the first entry of `ess-swv-pdflatex-commands'"
+  (interactive
+   (list
+    (let ((def (elt ess-swv-pdflatex-commands 0)))
+      (completing-read (format "pdf latex command (%s): " def)
+		              ess-swv-pdflatex-commands ; <- collection to choose from
+			             nil 'confirm ; or 'confirm-after-completion
+				            nil nil def))))
+  (let* ((buf (buffer-name))
+	  (namestem (file-name-sans-extension (buffer-file-name)))
+	   (latex-filename (concat namestem ".tex"))
+	    (tex-buf (get-buffer-create "*ESS-tex-output*"))
+	    ;; (pdfviewer (ess-get-pdf-viewer))
+	     (pdf-status)
+	     ;; (cmdstr-win (format "start \"%s\" \"%s.pdf\""
+	     ;;     pdfviewer namestem))
+	     ;; (cmdstr (format "\"%s\" \"%s.pdf\" &" pdfviewer namestem))
+         )
+
+
+    (message "Running '%s' on '%s' ..." pdflatex-cmd latex-filename)
+    (shell-command (concat "cd " (file-name-directory latex-filename)))
+    (shell-command (concat "pdflatex " latex-filename) tex-buf)
+    (setq errors (org-export-latex-get-error tex-buf))
+    (switch-to-buffer tex-buf)
+    (if errors
+        (message (concat "** OOPS: errors in pdflatex: " errors))
+      (message "Running '%s' on '%s' ... done!" pdflatex-cmd latex-filename))
+
+    ;; (setq pdf-status
+    ;;       (call-process pdflatex-cmd nil tex-buf 1
+    ;;       latex-filename (concat "-output-directory=" (file-name-directory latex-filename) )))
+    ;; (if (not (= 0 pdf-status))
+    ;;     (message "** OOPS: error in '%s' (%d)!" pdflatex-cmd pdf-status)
+    ;;   (message "Running '%s' on '%s' ... done!" pdflatex-cmd latex-filename))
+    (switch-to-buffer buf)
+
+    (display-buffer tex-buf)))
+
+(defun ess-pdflatex ()
+   "Run pdflatex on current .tex file"
+   (interactive)
+   (ess-tex-PDF "pdflatex"))
+
+(defun ess-knitr-weave ()
+   "Run Sweave on the current .Rnw file."
+   (interactive)
+   (ess-knitr-run-in-R "knit")
+   ;; need to wait for the prompt and refresh the emacs winds here:
+   (ess-prompt-wait2 (get-process ess-current-process-name))
+   (ess-tex-PDF "pdflatex"))
+
+(global-set-key [f7] 'ess-knitr-weave) ;; .org -> .Rnw -> .tex
+(global-set-key [f6] 'ess-pdflatex) ;; .tex -> .pdf
+
+
+;; end of org-knitr
+
+#+end_src
+
+
+*** Show filename
+
+#+begin_src emacs-lisp
+(defun show-file-name ()
+  "Show the full path file name in the minibuffer."
+  (interactive)
+  (message (buffer-file-name))
+  (kill-new (file-truename buffer-file-name))
+)
+(global-set-key "\C-cz" 'show-file-name)
+
+
+#+end_src
+
+
 ** IRC
 Sometimes useful for getting help on R or Emacs. 
 #+source: rirc-configuration
 #+begin_src emacs-lisp
-  ;; connect to irc on invocation but don't autojoin any channels
-  (require 'rcirc)
-  (add-to-list 'rcirc-server-alist
-                       '("irc.freenode.net"))
+      ;; connect to irc on invocation but don't autojoin any channels
+      (require 'rcirc)
+      (add-to-list 'rcirc-server-alist
+                           '("irc.freenode.net"))
+  (setq rcirc-default-nick "ajerneck")
 #+end_src
 
+
+
+** Final Custom elements
+Some last tweaks. 
+
+#+srcname: final-custom
+#+begin_src emacs-lisp
+  ;; Line-spacing tweak (Optimized for PragmataPro)
+  (setq-default line-spacing 5)
+  
+  ;; minimize fringe
+  (setq-default indicate-empty-lines nil)
+  
+  ;; Add keybindings for commenting regions of text
+  (global-set-key (kbd "C-c ;") 'comment-or-uncomment-region)
+  (global-set-key (kbd "M-'") 'comment-or-uncomment-region)
+  
+  ;; Base dir
+  (cd "~/")
+
+
+#+end_src
