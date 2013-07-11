@@ -43,3 +43,5 @@ src/auctex-src/*elc
 /index.org
 /vc-git.awk
 /savehist
+## don't ignore this file, it contains custom remember templates.
+!org-capture-templates.el
