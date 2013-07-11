@@ -180,6 +180,16 @@ A pandoc menu for markdown and tex files.
 #+END_SRC 
 
 
+*** Todo 
+
+#+begin_src emacs-lisp
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "NEXT(n)" "STARTED(s)" "CURRENT(u!)" "WAIT(w@)" "SOMEDAY(y)" "|" "DONE(d!)" "CANCELLED(c@)")
+	(sequence "TODO(t)" "FREEWRITE(f)" "DRAFT(r)" "EDIT(e)" "|" "DONE(d!)" "CANCELLED(c@)")))
+
+#+END_SRC
+
+
 *** Autosave
 
 #+begin_src emacs-lisp
