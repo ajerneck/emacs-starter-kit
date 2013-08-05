@@ -50,6 +50,36 @@ Finally, the [[*Local%20Org-mode%20XeLaTeX%20Export%20Settings][Local Org-mode X
 #+end_src
 
 
+*** enable undo-tree mode globally
+
+#+BEGIN_SRC emacs-lisp
+
+(global-undo-tree-mode)
+
+#+END_SRC
+
+
+*** use buffer-move to move buffers around
+    - taken from [[http://www.johndcook.com/blog/2012/03/07/shuffling-emacs-windows/]]
+
+#+begin_src emacs-lisp
+  
+  (global-set-key (kbd "C-x <up>")     'buf-move-up)
+  (global-set-key (kbd "C-x <down>")   'buf-move-down)
+  (global-set-key (kbd "C-x <left>")   'buf-move-left)
+  (global-set-key (kbd "C-x <right>")  'buf-move-right)
+  
+  (add-hook 'org-mode-hook '(lambda ()
+                              (local-set-key (kbd "C-x <up>")     'buf-move-up)
+                              (local-set-key (kbd "C-x <down>")   'buf-move-down)
+                              (local-set-key (kbd "C-x <left>")   'buf-move-left)
+                              (local-set-key (kbd "C-x <right>")  'buf-move-right)
+                              )
+            )
+  
+#+end_src
+
+
 ** Local Miscellaneous Settings
 *** Color Theme Tweaks
 The theme package is loaded in =starter-kit-misc.org=. The settings
@@ -76,6 +106,7 @@ as turning off the sans-serif heading style that AucTeX defaults to.
                (set-face-attribute 'org-level-5 nil :height 1.1)))
 
 #+end_src
+
 
 ** Local LaTeX settings
 *** In-text Smart Quotes (XeLaTeX only)
