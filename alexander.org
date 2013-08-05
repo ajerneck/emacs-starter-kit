@@ -263,34 +263,21 @@ A pandoc menu for markdown and tex files.
 #+end_src
 
 
-** ESS
+*** Time tracking 
 
-*** turn off 'smart underscore'
+#+source: time tracking
 #+begin_src emacs-lisp
-(ess-toggle-underscore nil)
-
-#+END_SRC
-
-*** Remote Sessions
-
-Remote sessions: configuring ESS for use with GNU screen and remote
-server. See https://stat.ethz.ch/pipermail/ess-help/2010-July/006202.html
-used to send 'screen' keybindings to shell in emacs
-
-#+begin_src emacs-lisp
-(define-key shell-mode-map (kbd "C-l") (lambda (seq) (interactive "k")
-(process-send-string nil seq)))
-(define-key inferior-ess-mode-map (kbd "C-l") (lambda (seq)
-(interactive "k") (process-send-string nil seq)))
+  (setq org-clock-persist 'history)
+  (org-clock-persistence-insinuate)
+  (setq org-log-into-drawer "LOGBOOK")
 #+end_src
 
-*** Tags
 
-#+begin_src emacs-lisp
+*** Inline tasks
 
-(visit-tags-table "~/rtags/TAGS")
-#+end_src
-
+#+BEGIN_SRC emacs-lisp
+(require 'org-inlinetask)
+#+end_Src
 
 ** Programming Modes
 *** Haskell  
