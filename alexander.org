@@ -812,7 +812,23 @@ symlink to ~/repos/orgmode-accessories/ox-ravel.el.
   (ess-swv-run-in-R "knit2pdf"))
 
 #+end_src
-   
+
+Function to run my own rlint functions on saving R buffers.
+
+#+BEGIN_SRC emacs-lisp
+  (defun ess-run-rlint ()
+    (interactive)
+    (let ((cmd "chk_globals()") ) 
+         (ess-send-string (get-process "R") cmd cmd)
+         )
+    (message "Running rlint...")
+    )
+  
+  (add-hook 'ess-mode-hook
+            (lambda ()
+              (add-hook 'after-save-hook 'ess-run-rlint nil t)))
+    
+#+END_SRC
 
 ** Final Custom elements
 Some last tweaks. 
