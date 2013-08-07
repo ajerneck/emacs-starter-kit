@@ -812,6 +812,26 @@ default using the first entry of `ess-swv-pdflatex-commands'"
 #+end_src
 
 
+*** join multiple lines
+
+Taken from:
+http://lists.gnu.org/archive/html/help-gnu-emacs/2007-05/msg01149.html
+
+#+BEGIN_SRC emacs-lisp
+  
+  (defun join-region (beg end)
+    "Apply join-line over region."
+    (interactive "r")
+    (if mark-active
+        (let ((beg (region-beginning))
+              (end (copy-marker (region-end))))
+          (goto-char beg)
+          (while (< (point) end)
+            (join-line 1))
+          )))
+  
+#+END_SRC
+
 ** IRC
 Sometimes useful for getting help on R or Emacs. 
 #+source: rirc-configuration
