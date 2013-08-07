@@ -80,6 +80,44 @@ Finally, the [[*Local%20Org-mode%20XeLaTeX%20Export%20Settings][Local Org-mode X
 #+end_src
 
 
+
+*** setting terminal window name
+
+
+This is a combination of functions taken from various places to set
+the urxvt terminal window to the current emacs buffer name, so that
+arbtt can extract that information for time tracking.
+Sources:
+my-set-xterm-title comes from http://aufflick.com/blog/2006/01/03/get-emacs-to-set-your-xterm-title
+advise-commands comes from https://github.com/bbatsov/prelude/blob/master/core/prelude-editor.el
+
+#+BEGIN_SRC emacs-lisp
+  
+  (require 'xterm-frobs)
+  
+  (defun my-set-xterm-title ()
+    (xterm-set-window-title
+     (concat "emacs: " (buffer-file-name))))
+  
+  (defmacro advise-commands (advice-name commands &rest body)
+    "Apply advice named ADVICE-NAME to multiple COMMANDS.
+  The body of the advice is in BODY."
+    `(progn
+       ,@(mapcar (lambda (command)
+                   `(defadvice ,command (after ,(intern (concat (symbol-name command) "-" advice-name)) activate)
+                      ,@body))
+                 commands))
+    )
+  
+  (advise-commands "xterm-title"
+                   (switch-to-buffer other-window windmove-up windmove-down windmove-left windmove-right)
+                   (my-set-xterm-title))
+  
+  (add-hook 'mouse-leave-buffer-hook 'my-set-xterm-title)
+    
+#+END_SRC
+
+
 ** Local Miscellaneous Settings
 *** Color Theme Tweaks
 The theme package is loaded in =starter-kit-misc.org=. The settings
