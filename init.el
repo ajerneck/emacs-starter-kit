@@ -51,6 +51,10 @@
   (set-face-attribute 'default nil :height 121 :font "Inconsolata"))
  )
 
+;; remove the local starter-kit el file (so that changes made in org files
+;; are picked up.
+(shell-command "rm ~/.emacs.d/starter-kit-alexander.el")
+
 ;; Load up Org Mode and Babel
 ;; load up the main file
 ;; org-mode windmove compatibility
