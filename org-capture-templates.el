@@ -9,13 +9,13 @@
          "* %? :note: \n  %U")
         ("i" "Idea" entry (file+headline "~/start/admin/org/ideas.org" "Inbox")
          "* %? :idea: \n  %U")
+        ("r" "Read" entry (file+headline "/home/alexander/start/academic/lit/reading/reading.org" "Inbox") "* TODO %? %^G \n %U\n%a")
         ("j" "Journal" entry (file+datetree "~/start/admin/org/journal.org")
          "* %U Journal Entry\n%?\n
 
 ** Goals for tomorrow
 ")
-
-        ("r" "Resistance Planning" entry (file+datetree "~/start/admin/org/journal.org")
+        ("p" "Resistance Planning" entry (file+datetree "~/start/admin/org/journal.org")
          "* %U Plan\n
         - [ ] 09:00
         - [ ]
