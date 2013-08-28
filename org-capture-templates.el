@@ -3,7 +3,8 @@
 ;; org-mode's rendering of the org-babel file with all the settings (alexander.org)
 ;; otherwise.
 (setq org-capture-templates
-      '(("t" "Task" entry (file+headline "~/start/admin/org/inbox.org" "Tasks")
+      '(
+        ("t" "Task" entry (file+headline "~/start/admin/org/inbox.org" "Tasks")
          "* TODO %? %^G \n  %U\n%a")
         ("n" "Note" entry (file+headline "~/start/admin/org/notes.org" "Inbox")
          "* %? :note: \n  %U")
