@@ -109,11 +109,12 @@ advise-commands comes from https://github.com/bbatsov/prelude/blob/master/core/p
                  commands))
     )
   
-  (advise-commands "xterm-title"
-                   (switch-to-buffer other-window windmove-up windmove-down windmove-left windmove-right)
-                   (my-set-xterm-title))
+  ;; (advise-commands "xterm-title"
+  ;;                  (switch-to-buffer other-window windmove-up windmove-down windmove-left windmove-right)
+  ;;                  (my-set-xterm-title))
   
-  (add-hook 'mouse-leave-buffer-hook 'my-set-xterm-title)
+  ;(add-hook 'mouse-leave-buffer-hook 'my-set-xterm-title)
+  (add-hook 'desktop-after-read-hook 'my-set-xterm-title)
     
 #+END_SRC
 
