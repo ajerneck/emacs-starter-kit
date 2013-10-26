@@ -449,101 +449,102 @@ A pandoc menu for markdown and tex files.
 
 see http://pedrokroger.net/2010/07/configuring-emacs-as-a-python-ide-2/
 
-**** Python Modes
+# **** Python Modes
 
-#+begin_src emacs-lisp :eval never
-  ;; (require 'python-mode)
-  ;; (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
+# #+begin_src emacs-lisp
+#   (require 'python-mode)
+#   (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
   
-  ;; (require 'ipython)
+#   (require 'ipython)
   
-#+end_src
+# #+end_src
 
-**** Anything
+# **** Anything
 
-***** Setup
-#+begin_src emacs-lisp
-;; from anything homepage
-(require 'anything)
-(require 'anything-match-plugin)
-(require 'anything-config)
+# ***** Setup
+# #+begin_src emacs-lisp
+# ;; from anything homepage
+# (require 'anything)
+# (require 'anything-match-plugin)
+# (require 'anything-config)
 
-#+end_src
+# #+end_src
 
-***** anything-ipython
+# ***** anything-ipython
 
-#+begin_src emacs-lisp :eval never
-  ;;;; from anything-ipython.el
-  ;; (require 'anything-ipython)
-  ;; (add-hook 'python-mode-hook #'(lambda ()
-  ;;                                 (define-key py-mode-map (kbd "M-<tab>") 'anything-ipython-complete)))
-  ;; (add-hook 'ipython-shell-hook #'(lambda ()
-  ;;                                   (define-key py-mode-map (kbd "M-<tab>") 'anything-ipython-complete)))
+# #+begin_src emacs-lisp :eval never
+#   ;;;; from anything-ipython.el
+#   ;; (require 'anything-ipython)
+#   ;; (add-hook 'python-mode-hook #'(lambda ()
+#   ;;                                 (define-key py-mode-map (kbd "M-<tab>") 'anything-ipython-complete)))
+#   ;; (add-hook 'ipython-shell-hook #'(lambda ()
+#   ;;                                   (define-key py-mode-map (kbd "M-<tab>") 'anything-ipython-complete)))
   
-  ;; (when (require 'anything-show-completion nil t)
-  ;;   (use-anything-show-completion 'anything-ipython-complete
-  ;;                                 '(length initial-pattern)))
+#   ;; (when (require 'anything-show-completion nil t)
+#   ;;   (use-anything-show-completion 'anything-ipython-complete
+#   ;;                                 '(length initial-pattern)))
   
   
-#+end_src
+# #+end_src
 
-**** pylookup
+# **** pylookup
 
-Lookup python documentation in emacs.
+# Lookup python documentation in emacs.
 
-#+begin_src emacs-lisp
-;; add pylookup to your loadpath, ex) ~/.emacs.d/pylookup
-(setq pylookup-dir "/home/alexander/downloads/sources/tsgates-pylookup-3202709")
-(add-to-list 'load-path pylookup-dir)
+# #+begin_src emacs-lisp
+# ;; add pylookup to your loadpath, ex) ~/.emacs.d/pylookup
+# (setq pylookup-dir "/home/alexander/downloads/sources/tsgates-pylookup-3202709")
+# (add-to-list 'load-path pylookup-dir)
 
-;; load pylookup when compile time
-(eval-when-compile (require 'pylookup))
+# ;; load pylookup when compile time
+# (eval-when-compile (require 'pylookup))
 
-;; set executable file and db file
-(setq pylookup-program (concat pylookup-dir "/pylookup.py"))
-(setq pylookup-db-file (concat pylookup-dir "/pylookup.db"))
+# ;; set executable file and db file
+# (setq pylookup-program (concat pylookup-dir "/pylookup.py"))
+# (setq pylookup-db-file (concat pylookup-dir "/pylookup.db"))
 
-;; set search option if you want
-;; (setq pylookup-search-options '("--insensitive" "0" "--desc" "0"))
+# ;; set search option if you want
+# ;; (setq pylookup-search-options '("--insensitive" "0" "--desc" "0"))
 
-;; to speedup, just load it on demand
-(autoload 'pylookup-lookup "pylookup"
-  "Lookup SEARCH-TERM in the Python HTML indexes." t)
+# ;; to speedup, just load it on demand
+# (autoload 'pylookup-lookup "pylookup"
+#   "Lookup SEARCH-TERM in the Python HTML indexes." t)
 
-(autoload 'pylookup-update "pylookup"
-  "Run pylookup-update and create the database at `pylookup-db-file'." t)
+# (autoload 'pylookup-update "pylookup"
+#   "Run pylookup-update and create the database at `pylookup-db-file'." t)
 
-(global-set-key "\C-ch" 'pylookup-lookup)
-
-
-#+end_src
+# (global-set-key "\C-ch" 'pylookup-lookup)
 
 
+# #+end_src
 
-**** Lints
 
-Static code checkers for python
 
-#+begin_src emacs-lisp
-;; python pep8 and pylint
-(require 'python-pep8)
-(require 'python-pylint)
-;; delete trailing spaces when saving file
-;;(add-hook 'before-save-hook 'delete-trailing-whitespace)
-#+end_src
+# **** Lints
 
-**** Debugging
+# Static code checkers for python
 
-#+begin_src emacs-lisp
+# #+begin_src emacs-lisp
+# ;; python pep8 and pylint
+# (require 'python-pep8)
+# (require 'python-pylint)
+# ;; delete trailing spaces when saving file
+# ;;(add-hook 'before-save-hook 'delete-trailing-whitespace)
+# #+end_src
 
-;; highlight python breakpoints
-(defun annotate-pdb()
-  (interactive)
-  (highlight-lines-matching-regexp "import pdb")
-  (highlight-lines-matching-regexp "pdb.set_trace()"))
-(add-hook 'python-mode-hook 'annotate-pdb)
+# **** Debugging
 
-#+end_src
+# #+begin_src emacs-lisp
+
+# ;; highlight python breakpoints
+# (defun annotate-pdb()
+#   (interactive)
+#   (highlight-lines-matching-regexp "import pdb")
+#   (highlight-lines-matching-regexp "pdb.set_trace()"))
+# (add-hook 'python-mode-hook 'annotate-pdb)
+
+# #+end_src
+
 
 *** SQL
 
@@ -890,10 +891,44 @@ Function to run my own rlint functions on saving R buffers.
     (message "Running rlint...")
     )
   
-  (add-hook 'ess-mode-hook
-            (lambda ()
-              (add-hook 'after-save-hook 'ess-run-rlint nil t)))
+  ;; commented this out because it just takes too long and I don't use
+  ;; it really.
+  ;; (add-hook 'ess-mode-hook
+  ;;           (lambda ()
+  ;;             (add-hook 'after-save-hook 'ess-run-rlint nil t)))
     
+#+END_SRC
+
+
+** Local ess settings
+
+Turn off 'smart underscore' (_ inserts <-).
+
+#+BEGIN_SRC emacs-lisp
+  (ess-toggle-underscore nil)
+  
+#+END_SRC
+
+
+** Twit
+
+#+BEGIN_SRC emacs-lisp
+
+(setq twittering-use-maste-password t)
+(setq twittering-icon-mode t)
+(setq twittering-use-icon-storage t)
+
+#+END_SRC
+
+** W3m
+
+Set w3m as default browser.
+
+#+BEGIN_SRC emacs-lisp
+
+(setq browse-url-browser-function 'w3m-browse-url)
+(autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
+
 #+END_SRC
 
 ** Final Custom elements
