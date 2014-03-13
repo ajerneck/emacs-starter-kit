@@ -288,14 +288,15 @@ A pandoc menu for markdown and tex files.
 *** Publishing
 
 #+begin_src emacs-lisp
-  (setq org-publish-project-alist
-             '(("org"
-                :base-directory "/home/alexander/start/academic/lit/reading/"
-                :publishing-directory "/home/alexander/start/academic/lit/reading_html"
-                :section-numbers nil
-                :with-toc nil
-                )))
-  
+    (setq org-publish-project-alist
+               '(("org"
+                  :base-directory "/home/alexander/start/academic/lit/reading/"
+                  :publishing-directory "/home/alexander/start/academic/lit/reading_html"
+                  :section-numbers nil
+                  :with-toc nil
+                  :publishing-function org-html-publish-to-html
+                  :html-head "<link rel=\"stylesheet\" href=\"style.css\" type=\"text/css\"/>"
+                  )))
 #+end_src
 
 
