@@ -983,6 +983,11 @@ Turn off 'smart underscore' (_ inserts <-).
   
 #+END_SRC
 
+Visit tags table on startup.
+#+BEGIN_SRC emacs-lisp
+(visit-tags-table "/home/alexander/rtags/TAGS")
+
+#+END_SRC
 
 ** Twit
 
