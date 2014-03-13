@@ -995,6 +995,56 @@ Set w3m as default browser.
 
 #+END_SRC
 
+
+** Automatically visit tags if function can't be found
+
+#+BEGIN_SRC emacs-lisp
+  
+  (defadvice find-tag (around refresh-etags activate)
+    "Rerun etags and reload tags if tag not found and redo find-tag.              
+     If buffer is modified, ask about save before running etags."
+    (let ((extension (file-name-extension (buffer-file-name))))
+      (condition-case err
+          ad-do-it
+        (error (and (buffer-modified-p)
+                    (not (ding))
+                    (y-or-n-p "Buffer is modified, save it? ")
+                    (save-buffer))
+               (er-refresh-etags extension)
+               ad-do-it))))
+  
+(defun er-refresh-etags (&optional extension)
+  "Run etags on all peer files in current dir and reload them silently."
+  (interactive)
+  (shell-command (format "etags *.%s" (or extension "el")))
+  (let ((tags-revert-without-query t))  ; don't query, revert silently          
+    (visit-tags-table "~/rtags/TAGS" nil)))
+
+#+END_SRC
+
+
+
+** ace-jump mode
+
+#+BEGIN_SRC emacs-lisp
+  
+  (autoload
+    'ace-jump-mode
+    "ace-jump-mode"
+    "Emacs quick move minor mode"
+    t)
+  ;; you can select the key you prefer to
+  (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)  
+  
+#+END_SRC
+
+
+** Projectile: project-handling mode.
+
+#+BEGIN_SRC emacs-lisp
+(projectile-global-mode)
+
+#+END_SRC
 ** Final Custom elements
 Some last tweaks. 
 
