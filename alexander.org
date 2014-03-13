@@ -126,6 +126,16 @@ advise-commands comes from https://github.com/bbatsov/prelude/blob/master/core/p
 
 #+END_SRC
 
+
+
+*** Color Theme
+
+Using moe: [[https://github.com/kuanyui/moe-theme.el]]
+
+#+BEGIN_SRC emacs-lisp
+	(load-theme 'moe-dark t)
+#+END_SRC
+
 ** Local Miscellaneous Settings
 *** Color Theme Tweaks
 The theme package is loaded in =starter-kit-misc.org=. The settings
