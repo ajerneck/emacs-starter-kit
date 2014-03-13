@@ -45,3 +45,4 @@ src/auctex-src/*elc
 /savehist
 ## don't ignore this file, it contains custom remember templates.
 !org-capture-templates.el
+/projectile-bookmarks.eld
