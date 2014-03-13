@@ -932,6 +932,16 @@ symlink to ~/repos/orgmode-accessories/ox-ravel.el.
   (require 'ox-ravel)
 #+end_src   
 
+Make cutom keybinding for org-ravel knitr export because we use it so often.
+
+#+BEGIN_SRC emacs-lisp
+(global-set-key [f8] 'org-ravel-latex-noweb-dispatch) ;; .org -> .Rnw -> .tex
+
+#+END_SRC
+
+#+RESULTS:
+: org-ravel-latex-noweb-dispatch
+
 
 ** Local ess Functions
 
