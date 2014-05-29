@@ -989,6 +989,20 @@ Visit tags table on startup.
 
 #+END_SRC
 
+Set comment-column to zero.
+
+#+BEGIN_SRC emacs-lisp
+  
+  (defun my-ess-indent-hook ()
+    (setq comment-column 0))
+  
+  (add-hook 'ess-mode-hook 'my-ess-indent-hook)
+  
+  ;; (add-hook 'ess-mode-hook
+  ;;           '(lambda ()
+  ;;             (setq-local comment-column 0)))
+#+END_SRC
+
 ** Twit
 
 #+BEGIN_SRC emacs-lisp

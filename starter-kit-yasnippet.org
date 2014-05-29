@@ -18,7 +18,7 @@ Load the snippets defined in the package's =./snippets/= directory, and local sn
 
 #+begin_src emacs-lisp :tangle yes
   (yas/load-directory (expand-file-name "snippets" dotfiles-dir))
- 
+   
 #+end_src
 
 ** Load autocomplete
