@@ -473,7 +473,7 @@ Located in [[file:starter-kit-perl.org][starter-kit-perl]]
 Located in [[file:starter-kit-python.org][starter-kit-python]]
 
 #+begin_src emacs-lisp
-(starter-kit-load "starter-kit-python.org")
+;; (starter-kit-load "starter-kit-python.org")
 #+end_src
 
 *** Starter Kit Latex

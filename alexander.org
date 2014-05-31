@@ -63,12 +63,13 @@ Finally, the [[*Local%20Org-mode%20XeLaTeX%20Export%20Settings][Local Org-mode X
     - taken from [[http://www.johndcook.com/blog/2012/03/07/shuffling-emacs-windows/]]
 
 #+begin_src emacs-lisp
-  
+
+  (require 'buffer-move)
   (global-set-key (kbd "C-x <up>")     'buf-move-up)
   (global-set-key (kbd "C-x <down>")   'buf-move-down)
   (global-set-key (kbd "C-x <left>")   'buf-move-left)
   (global-set-key (kbd "C-x <right>")  'buf-move-right)
-  
+
   (add-hook 'org-mode-hook '(lambda ()
                               (local-set-key (kbd "C-x <up>")     'buf-move-up)
                               (local-set-key (kbd "C-x <down>")   'buf-move-down)
@@ -76,47 +77,47 @@ Finally, the [[*Local%20Org-mode%20XeLaTeX%20Export%20Settings][Local Org-mode X
                               (local-set-key (kbd "C-x <right>")  'buf-move-right)
                               )
             )
-  
+
 #+end_src
 
 
 
-*** setting terminal window name
+# *** setting terminal window name
 
 
-This is a combination of functions taken from various places to set
-the urxvt terminal window to the current emacs buffer name, so that
-arbtt can extract that information for time tracking.
-Sources:
-my-set-xterm-title comes from http://aufflick.com/blog/2006/01/03/get-emacs-to-set-your-xterm-title
-advise-commands comes from https://github.com/bbatsov/prelude/blob/master/core/prelude-editor.el
+# This is a combination of functions taken from various places to set
+# the urxvt terminal window to the current emacs buffer name, so that
+# arbtt can extract that information for time tracking.
+# Sources:
+# my-set-xterm-title comes from http://aufflick.com/blog/2006/01/03/get-emacs-to-set-your-xterm-title
+# advise-commands comes from https://github.com/bbatsov/prelude/blob/master/core/prelude-editor.el
 
-#+BEGIN_SRC emacs-lisp
+# #+BEGIN_SRC emacs-lisp 
   
-  (require 'xterm-frobs)
+#   (require 'xterm-frobs)
   
-  (defun my-set-xterm-title ()
-    (xterm-set-window-title
-     (concat "emacs: " (desktop-full-file-name))))
+#   (defun my-set-xterm-title ()
+#     (xterm-set-window-title
+#      (concat "emacs: " (desktop-full-file-name))))
   
-  (defmacro advise-commands (advice-name commands &rest body)
-    "Apply advice named ADVICE-NAME to multiple COMMANDS.
-  The body of the advice is in BODY."
-    `(progn
-       ,@(mapcar (lambda (command)
-                   `(defadvice ,command (after ,(intern (concat (symbol-name command) "-" advice-name)) activate)
-                      ,@body))
-                 commands))
-    )
+#   (defmacro advise-commands (advice-name commands &rest body)
+#     "Apply advice named ADVICE-NAME to multiple COMMANDS.
+#   The body of the advice is in BODY."
+#     `(progn
+#        ,@(mapcar (lambda (command)
+#                    `(defadvice ,command (after ,(intern (concat (symbol-name command) "-" advice-name)) activate)
+#                       ,@body))
+#                  commands))
+#     )
   
-  ;; (advise-commands "xterm-title"
-  ;;                  (switch-to-buffer other-window windmove-up windmove-down windmove-left windmove-right)
-  ;;                  (my-set-xterm-title))
+#   ;; (advise-commands "xterm-title"
+#   ;;                  (switch-to-buffer other-window windmove-up windmove-down windmove-left windmove-right)
+#   ;;                  (my-set-xterm-title))
   
-  ;(add-hook 'mouse-leave-buffer-hook 'my-set-xterm-title)
-  (add-hook 'desktop-after-read-hook 'my-set-xterm-title)
+#   ;(add-hook 'mouse-leave-buffer-hook 'my-set-xterm-title)
+#   (add-hook 'desktop-after-read-hook 'my-set-xterm-title)
     
-#+END_SRC
+# #+END_SRC
 
 
 *** Using desktops
@@ -1074,6 +1075,21 @@ Set w3m as default browser.
 (projectile-global-mode)
 
 #+END_SRC
+
+** Company-mode for completions
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'after-init-hook 'global-company-mode)
+
+#+END_SRC
+
+** Helm for universal completion
+
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'load-path "~/repos/helm")
+(require 'helm-config)
+#+END_SRC
+
 ** Final Custom elements
 Some last tweaks. 
 
