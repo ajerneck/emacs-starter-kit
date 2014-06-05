@@ -920,29 +920,6 @@ Sometimes useful for getting help on R or Emacs.
 
 
 
-** Local org-ravel setup
-
-Note: the ox-ravel file is kept in src/ox-ravel.el, which is a
-symlink to ~/repos/orgmode-accessories/ox-ravel.el.
-
-#+name: loadup
-#+begin_src emacs-lisp
-  (require 'ox-latex)
-  (require 'ox-html)
-  (require 'ox-md)
-  (require 'ox-ravel)
-#+end_src   
-
-Make cutom keybinding for org-ravel knitr export because we use it so often.
-
-#+BEGIN_SRC emacs-lisp
-(global-set-key [f8] 'org-ravel-latex-noweb-dispatch) ;; .org -> .Rnw -> .tex
-
-#+END_SRC
-
-#+RESULTS:
-: org-ravel-latex-noweb-dispatch
-
 
 ** Local ess Functions
 
