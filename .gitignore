@@ -22,7 +22,7 @@ session*
 tramp
 \#*
 ## exported files
-*el
+starter-kit*el
 starter-kit*html
 doc
 eshell/lastdir
@@ -43,6 +43,7 @@ src/auctex-src/*elc
 /index.org
 /vc-git.awk
 /savehist
-## don't ignore this file, it contains custom remember templates.
-!org-capture-templates.el
 /projectile-bookmarks.eld
+/alexander.el
+/bookmarks
+/org-clock-save.el
