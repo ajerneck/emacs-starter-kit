@@ -163,6 +163,34 @@ Using moe: [[https://github.com/kuanyui/moe-theme.el]]
 #+BEGIN_SRC emacs-lisp
 	(load-theme 'moe-dark t)
 #+END_SRC
+** El-Get
+
+   Taken from
+   http://tim.dysinger.net/posts/2014-02-18-haskell-with-emacs.html
+   El-get is a package manager, I use it here to download and setup
+   the Haskell recipe.
+
+#+BEGIN_SRC emacs-lisp
+;; EL-GET
+(add-to-list 'load-path (locate-user-emacs-file "el-get/el-get"))
+(unless (require 'el-get nil 'noerror)
+  (with-current-buffer
+      (url-retrieve-synchronously
+       "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
+    (goto-char (point-max))
+    (eval-print-last-sexp)))
+(defun el-get-sync-recipes (overlay)
+  (let* ((recipe-glob (locate-user-emacs-file (concat overlay "/recipes/*.rcp")))
+         (recipe-files (file-expand-wildcards recipe-glob))
+         (recipes (mapcar 'el-get-read-recipe-file recipe-files)))
+    (mapcar (lambda (r) (add-to-list 'el-get-sources r)) recipes)
+    (el-get 'sync (mapcar 'el-get-source-name recipes))))
+(setq el-get-user-package-directory user-emacs-directory)
+;; EL-GET SYNC OVERLAYS
+(el-get-sync-recipes "el-get-haskell")
+(el-get-sync-recipes "el-get-user")
+
+#+END_SRC
 
 ** Local Miscellaneous Settings
 *** Color Theme Tweaks
