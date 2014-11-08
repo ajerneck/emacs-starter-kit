@@ -120,6 +120,24 @@ Finally, the [[*Local%20Org-mode%20XeLaTeX%20Export%20Settings][Local Org-mode X
 # #+END_SRC
 
 
+*** window numbering to shift focus
+
+From: http://blog.binchen.org/posts/moving-focus-and-buffer-between-emacs-window.html
+
+#+BEGIN_SRC emacs-lisp
+
+(require 'window-numbering)
+;; highlight the window number in pink
+(custom-set-faces '(window-numbering-face (( t (:foreground "DeepPink" :underline "DeepPink" :weight bold)))))
+
+(window-numbering-mode 1)
+
+#+END_SRC
+
+#+RESULTS:
+: t
+
+
 *** Using desktops
 
 #+BEGIN_SRC emacs-lisp
