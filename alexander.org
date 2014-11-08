@@ -1003,7 +1003,7 @@ Turn off 'smart underscore' (_ inserts <-).
 
 Visit tags table on startup.
 #+BEGIN_SRC emacs-lisp
-(visit-tags-table "~/start/sys/rtags/tags")
+(visit-tags-table "~/start/code/r/TAGS")
 
 #+END_SRC
 
@@ -1065,10 +1065,9 @@ Set w3m as default browser.
   (interactive)
   (shell-command (format "etags *.%s" (or extension "el")))
   (let ((tags-revert-without-query t))  ; don't query, revert silently          
-    (visit-tags-table "~/s/sys/rtags/tags" nil)))
+    (visit-tags-table "~/start/code/r/TAGS" nil)))
 
 #+END_SRC
-
 
 
 ** ace-jump mode
