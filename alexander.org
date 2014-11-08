@@ -360,6 +360,14 @@ A pandoc menu for markdown and tex files.
 
 
 
+*** Agenda views
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-agenda-custom-commands
+        '(("p" tags-todo "TODO=\"NEXT\"project:current|TODO=\"STARTED\"project:current|TODO=\"WAIT\"project:current")))
+
+#+END_SRC
+
 *** Capture
 
 #+begin_src emacs-lisp
