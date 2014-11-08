@@ -31,6 +31,15 @@ Finally, the [[*Local%20Org-mode%20XeLaTeX%20Export%20Settings][Local Org-mode X
 
 ** Local Emacs Settings
 
+*** auto saving files
+
+This helps with syncing to rsync, because it will sync changes that
+you might not have saved, preventing conflicts.
+
+#+BEGIN_SRC emacs-lisp
+(setq auto-save-visited-file-name t)
+#+END_SRC
+
 *** Saving minibuffer histories
 #+begin_src emacs-lisp
 
