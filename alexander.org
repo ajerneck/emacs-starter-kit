@@ -1111,7 +1111,7 @@ Completion for latex
 (company-auctex-init)
 #+END_SRC
 
-** using difpf-hl-margin-mode to see vc changes directly.
+** using diff-hl-margin-mode to see vc changes directly.
 
 #+BEGIN_SRC emacs-lisp
   (global-diff-hl-mode)
