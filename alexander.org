@@ -403,98 +403,126 @@ A pandoc menu for markdown and tex files.
 #+end_Src
 
 ** Programming Modes
-*** Haskell  
 
-**** Haskell mode
+# *** Haskell
+
+# **** ghc-mod emacs front-end
+
+# Ghc-mod should be installed via el-get, but I'm configuring it here
+# anyway because it does not seem to work.
+# Taken from: http://www.mew.org/~kazu/proj/ghc-mod/en/preparation.html
+
+# #+BEGIN_SRC emacs-lisp 
+# (autoload 'ghc-init "ghc" nil t)
+# (autoload 'ghc-debug "ghc" nil t)
+# (add-hook 'haskell-mode-hook (lambda () (ghc-init)))
+# #+END_SRC
+
+
+# **** Structured-haskell-mode
+# Structured-haskell-mode: https://github.com/chrisdone/structured-haskell-mode
+
+# #+BEGIN_SRC emacs-lisp
+# (add-to-list 'load-path "~/repos/structured-haskell-mode/elisp")
+# (require 'shm)
+# (add-hook 'haskell-mode-hook 'structured-haskell-mode)
+# (setq shm-program-name "/home/alexander/repos/structured-haskell-mode/dist/build/structured-haskell-mode/structured-haskell-mode")
+# #+END_SRC
+
+
+
+*** old-Haskell
+
+# **** Haskell mode
    
-    # # #+begin_src emacs-lisp
-    # ;; for haskell-mode
-    # (load "/usr/share/emacs/site-lisp/haskell-mode/haskell-site-file.el")
-    # (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-    # (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+#     # # #+begin_src emacs-lisp
+#     # ;; for haskell-mode
+#     # (load "/usr/share/emacs/site-lisp/haskell-mode/haskell-site-file.el")
+#     # (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+#     # (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
    
-    # ;; ignore compiled Haskell files in filename completions
-    # (add-to-list 'completion-ignored-extensions ".hi")
+#     # ;; ignore compiled Haskell files in filename completions
+#     # (add-to-list 'completion-ignored-extensions ".hi")
    
-    # # #+end_src
+#     # # #+end_src
    
-**** Auto-completion in haskell-mode
+# **** Auto-completion in haskell-mode
    
-    #+begin_src emacs-lisp
-    ;; for auto-completion in haskell-mode
-    (add-to-list 'ac-modes 'haskell-mode)
-    #+end_src
+#     #+begin_src emacs-lisp
+#     ;; for auto-completion in haskell-mode
+#     (add-to-list 'ac-modes 'haskell-mode)
+#     #+end_src
    
-**** ghc-mod
+# **** ghc-mod
    
-    # #+begin_src emacs-lisp :eval never
-    # (add-hook 'haskell-mode-hook (lambda () (ghc-init)))
-    # #+end_src
+#     # #+begin_src emacs-lisp :eval never
+#     # (add-hook 'haskell-mode-hook (lambda () (ghc-init)))
+#     # #+end_src
    
-**** hs-lint
+# **** hs-lint
   
-   Run hlint in emacs with C-c l
-   From [[http://alexott.blogspot.com/2009/01/running-hlint-from-emacs.html]]
+#    Run hlint in emacs with C-c l
+#    From [[http://alexott.blogspot.com/2009/01/running-hlint-from-emacs.html]]
   
-# #+BEGIN_SRC emacs-lisp :eval never
-#      (require 'hs-lint)
-#      (defun my-haskell-mode-hook ()
-#        (local-set-key "\C-cl" 'hs-lint))
+# # #+BEGIN_SRC emacs-lisp :eval never
+# #      (require 'hs-lint)
+# #      (defun my-haskell-mode-hook ()
+# #        (local-set-key "\C-cl" 'hs-lint))
+    
+# # #+END_SRC
+  
+  
+# **** flymake 
+#    From: http://www.emacswiki.org/emacs/FlymakeHaskell
+  
+# # #+begin_src emacs-lisp :eval never
+      
+# #      (defun flymake-haskell-init ()
+# #        "When flymake triggers, generates a tempfile containing the
+# #        contents of the current buffer, runs `hslint` on it, and
+# #        deletes file. Put this file path (and run `chmod a+x hslint`)
+# #        to enable hslint: https://gist.github.com/1241073"
+# #        (let* ((temp-file   (flymake-init-create-temp-buffer-copy
+# #                             'flymake-create-temp-inplace))
+# #               (local-file  (file-relative-name
+# #                             temp-file
+# #                             (file-name-directory buffer-file-name))))
+# #          (list "hslint" (list local-file))))
+    
+# #      (defun flymake-haskell-enable ()
+# #        "Enables flymake-mode for haskell, and sets <C-c d> as command
+# #        to show current error."
+# #        (when (and buffer-file-name
+# #                   (file-writable-p
+# #                    (file-name-directory buffer-file-name))
+# #                   (file-writable-p buffer-file-name))
+# #          (local-set-key (kbd "C-c d") 'flymake-display-err-menu-for-current-line)
+# #          (flymake-mode t)))
+    
+# #      ;; Forces flymake to underline bad lines, instead of fully
+# #      ;; highlighting them; remove this if you prefer full highlighting.
+# #      (custom-set-faces
+# #       '(flymake-errline ((((class color)) (:underline "red"))))
+# #       '(flymake-warnline ((((class color)) (:underline "yellow")))))
+    
+      
+# #      (eval-after-load 'haskell-mode
+# #        '(progn
+# #           (require 'flymake)
+# #           (push '("\\.l?hs\\'" flymake-haskell-init) flymake-allowed-file-name-masks)
+# #           (add-hook 'haskell-mode-hook 'flymake-haskell-enable)
+# #           (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)))
+  
+      
+# # #+end_src elisp
+  
+# #+begin_src emacs-lisp
+    
+#   (require 'flymake-haskell-multi)
+#   (add-hook 'haskell-mode-hook 'flymake-haskell-multi-load)
+#   (add-hook 'haskell-mode-hook 'haskell-indent-mode)
     
 # #+END_SRC
-  
-  
-**** flymake 
-   From: http://www.emacswiki.org/emacs/FlymakeHaskell
-  
-# #+begin_src emacs-lisp :eval never
-      
-#      (defun flymake-haskell-init ()
-#        "When flymake triggers, generates a tempfile containing the
-#        contents of the current buffer, runs `hslint` on it, and
-#        deletes file. Put this file path (and run `chmod a+x hslint`)
-#        to enable hslint: https://gist.github.com/1241073"
-#        (let* ((temp-file   (flymake-init-create-temp-buffer-copy
-#                             'flymake-create-temp-inplace))
-#               (local-file  (file-relative-name
-#                             temp-file
-#                             (file-name-directory buffer-file-name))))
-#          (list "hslint" (list local-file))))
-    
-#      (defun flymake-haskell-enable ()
-#        "Enables flymake-mode for haskell, and sets <C-c d> as command
-#        to show current error."
-#        (when (and buffer-file-name
-#                   (file-writable-p
-#                    (file-name-directory buffer-file-name))
-#                   (file-writable-p buffer-file-name))
-#          (local-set-key (kbd "C-c d") 'flymake-display-err-menu-for-current-line)
-#          (flymake-mode t)))
-    
-#      ;; Forces flymake to underline bad lines, instead of fully
-#      ;; highlighting them; remove this if you prefer full highlighting.
-#      (custom-set-faces
-#       '(flymake-errline ((((class color)) (:underline "red"))))
-#       '(flymake-warnline ((((class color)) (:underline "yellow")))))
-    
-      
-#      (eval-after-load 'haskell-mode
-#        '(progn
-#           (require 'flymake)
-#           (push '("\\.l?hs\\'" flymake-haskell-init) flymake-allowed-file-name-masks)
-#           (add-hook 'haskell-mode-hook 'flymake-haskell-enable)
-#           (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)))
-  
-      
-# #+end_src elisp
-  
-#+begin_src emacs-lisp
-    
-  (require 'flymake-haskell-multi)
-  (add-hook 'haskell-mode-hook 'flymake-haskell-multi-load)
-  (add-hook 'haskell-mode-hook 'haskell-indent-mode)
-    
-#+END_SRC
   
   
 *** Octave
