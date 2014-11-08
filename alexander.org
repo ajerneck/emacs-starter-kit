@@ -1161,9 +1161,12 @@ Based on http://tuhdo.github.io/helm-intro.html
 
 
 #+END_SRC
+** Flycheck for automatic syntax checking
 
-
-
+#+BEGIN_SRC emacs-lisp
+(require 'flycheck)
+(add-hook 'after-init-hook #'global-flycheck-mode)
+#+END_SRC
 
 ** Ess-Markdown Support
 
