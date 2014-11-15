@@ -1250,14 +1250,47 @@ Evil is vim emulation for emacs.
 
 Homepage: https://gitorious.org/evil/pages/Home
 
-#+BEGIN_SRC emacs-lisp
 
+Get back org-mode tab key functionality in evil.
+From: http://stackoverflow.com/q/22878668/1072349
+
+#+BEGIN_SRC emacs-lisp
+(setq evil-want-C-i-jump nil)
+
+#+END_SRC 
+
+#+BEGIN_SRC emacs-lisp
 (add-to-list 'load-path "~/repos/evil")
 (require 'evil)
 (evil-mode 1)
 
 #+END_SRC
 
+Change mode line color to indicate evil state.
+Taken from: http://www.emacswiki.org/Evil
+
+#+BEGIN_SRC emacs-lisp
+;; change mode-line color by evil state
+   (lexical-let ((default-color (cons (face-background 'mode-line)
+                                      (face-foreground 'mode-line))))
+     (add-hook 'post-command-hook
+       (lambda ()
+         (let ((color (cond ((minibufferp) default-color)
+                            ((evil-insert-state-p) '("#e80000" . "#ffffff"))
+                            ((evil-emacs-state-p)  '("#444488" . "#ffffff"))
+                            ((buffer-modified-p)   '("#006fa0" . "#ffffff"))
+                            (t default-color))))
+           (set-face-background 'mode-line (car color))
+           (set-face-foreground 'mode-line (cdr color))))))
+
+#+END_SRC
+
+Make horizontal movement cross lines                                    
+From: http://stackoverflow.com/q/20882935/1072349
+#+BEGIN_SRC emacs-lisp
+(setq-default evil-cross-lines t)
+
+#+END_SRC
 
 ** Final Custom elements
 Some last tweaks. 
