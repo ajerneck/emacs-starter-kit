@@ -47,3 +47,8 @@ src/auctex-src/*elc
 /alexander.el
 /bookmarks
 /org-clock-save.el
+/abbrev_defs
+/el-get-haskell/
+/el-get/
+/flycheck_org-clock-save.el
+/projectile.cache

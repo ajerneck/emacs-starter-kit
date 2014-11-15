@@ -1243,6 +1243,22 @@ With prefix P, create local abbrev. Otherwise it will be global."
 (setq-default abbrev-mode t)
 
 #+END_SRC
+
+** evil
+
+Evil is vim emulation for emacs.
+
+Homepage: https://gitorious.org/evil/pages/Home
+
+#+BEGIN_SRC emacs-lisp
+
+(add-to-list 'load-path "~/repos/evil")
+(require 'evil)
+(evil-mode 1)
+
+#+END_SRC
+
+
 ** Final Custom elements
 Some last tweaks. 
 
