@@ -1262,7 +1262,10 @@ From: http://stackoverflow.com/q/22878668/1072349
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'load-path "~/repos/evil")
 (require 'evil)
-(evil-mode 1)
+
+;; don't enable evil-mode by default, so that we only use it when
+;;   we're really editing.
+;;(evil-mode 1)
 
 #+END_SRC
 
